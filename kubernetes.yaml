@@ -57,6 +57,6 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: backend-nest-test-svc
+            name: backend-nest-test-uac-svc
             port:
               number: 80

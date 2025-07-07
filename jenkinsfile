@@ -43,7 +43,7 @@ pipeline {
                         sh "docker tag backend-nest-test-uac ${dockerImagePrefix}/backend-nest-test-uac"
                         sh "docker tag backend-nest-test-uac ${dockerImagePrefix}/backend-nest-test-uac:${BUILD_NUMBER}"
                         sh "docker push ${dockerImagePrefix}/backend-nest-test-uac"
-                        sh "docker push ${dockerImagePrefix}/backend-nest-testuac:${BUILD_NUMBER}"
+                        sh "docker push ${dockerImagePrefix}/backend-nest-test-uac:${BUILD_NUMBER}"
                     }
                 }
             }

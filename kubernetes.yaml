@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: lab-test-uac
+  name: test-lab-uac
 --- 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-nest-test-uac
-  namespace: lab-test-uac
+  namespace: test-lab-uac
   labels:
     app: backend-nest-test-uac
 spec:
@@ -31,7 +31,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backend-nest-test-uac-svc
-  namespace: lab-test-uac
+  namespace: test-lab-uac
   labels:
     app: backend-nest-test-uac-svc
 spec:
@@ -46,7 +46,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-backend-nest-test-uac
-  namespace: lab-test-uac
+  namespace: test-lab-uac
 spec:
   ingressClassName: nginx
   rules:

@@ -40,8 +40,8 @@ pipeline {
                 script {
                     docker.withRegistry('https://gcr.io', 'gcp-credentials') { // Ensure you have GCP credentials set up in Jenkins
                         sh "docker build -t backend-nest-test-uac ."
-                        sh "docker tag backend-nest-uac ${dockerImagePrefix}/backend-nest-test-uac"
-                        sh "docker tag backend-nest-uac ${dockerImagePrefix}/backend-nest-test-uac:${BUILD_NUMBER}"
+                        sh "docker tag backend-nest-test-uac ${dockerImagePrefix}/backend-nest-test-uac"
+                        sh "docker tag backend-nest-test-uac ${dockerImagePrefix}/backend-nest-test-uac:${BUILD_NUMBER}"
                         sh "docker push ${dockerImagePrefix}/backend-nest-test-uac"
                         sh "docker push ${dockerImagePrefix}/backend-nest-testuac:${BUILD_NUMBER}"
                     }

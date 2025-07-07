@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+    
+      environment{
+        NPM_CONFIG_CACHE= "${WORKSPACE}/.npm"
+        dockerImagePrefix = "us-west1-docker.pkg.dev/lab-agibiz/docker-repository"
+        registry = "https://us-west1-docker.pkg.dev"
+        registryCredentials = "gcp-registry"
+     }
+    
+    stages {
+        stage('Instalacion de depencencias') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        
+        stage('Correr Tests') {
+            steps {
+                sh 'npm test'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${REGISTRY}:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+        
+        stage('Push Docker Images') {
+            steps {
+                script {
+                    docker.withRegistry('https://gcr.io', 'gcp-credentials') { // Ensure you have GCP credentials set up in Jenkins
+                        sh "docker build -t backend-nest-test-uac ."
+                        sh "docker tag backend-nest-uac ${dockerImagePrefix}/backend-nest-test-uac"
+                        sh "docker tag backend-nest-uac ${dockerImagePrefix}/backend-nest-test-uac:${BUILD_NUMBER}"
+                        sh "docker push ${dockerImagePrefix}/backend-nest-test-uac"
+                        sh "docker push ${dockerImagePrefix}/backend-nest-testuac:${BUILD_NUMBER}"
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Update the deployment with the new image
+                    sh """
+                        kubectl set image deployment/backend-nest-test-uac backend-nest-test-uac=${REGISTRY}:${env.BUILD_NUMBER} --record
+                        kubectl rollout status deployment/backend-nest-test-uac
+                    """
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}

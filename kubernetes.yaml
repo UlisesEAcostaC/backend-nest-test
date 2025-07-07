@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lab-uac
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-nest-test-uac
+  namespace: lab-cmc
+  labels:
+    app: backend-nest-test-uac
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app:backend-nest-test-uac
+  template:
+    metadata:
+      labels:
+        app: backend-nest-test-uac
+    spec:
+      containers:
+      - name: backend-nest-test-uac
+        image: us-west1-docker.pkg.dev/lab-agibiz/docker-repository/backend-nest-uac
+        imagePullPolicy: Always

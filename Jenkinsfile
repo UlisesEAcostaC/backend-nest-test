@@ -59,7 +59,7 @@ pipeline {
             }
             steps {
                 withKubeConfig([credentialsId: 'gcp-kubeconfig']){
-                    sh "kubectl -n lab-test-uac set image deployments/backend-nest-test-uac backend-nest-test-uac=${dockerImagePrefix}/backend-nest-test-uac:${BUILD_NUMBER}"
+                    sh "kubectl -n test-lab-uac set image deployments/backend-nest-test-uac backend-nest-test-uac=${dockerImagePrefix}/backend-nest-test-uac:${BUILD_NUMBER}"
                 }
             }
         }
